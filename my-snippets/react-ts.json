@@ -1,0 +1,19 @@
+{
+  "React Functional Component": {
+    "prefix": "rfc",
+    "body": [
+      "import { FC, ReactElement } from 'react'\n\n",
+      "export interface ${1:$TM_FILENAME_BASE}Props{",
+      "\tchildren?: ReactElement",
+      "\t$2",
+      "}\n",
+      "const $1: FC<$1Props> = () => {",
+      "\treturn (",
+      "\t\t<div>$0</div>",
+      "\t)",
+      "}\n",
+      "export default $1"
+    ],
+    "description": "React functional component with default export"
+  }
+}
