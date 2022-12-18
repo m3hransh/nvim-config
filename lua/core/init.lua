@@ -1,0 +1,6 @@
+require "core.autocommands"
+require "core.colorscheme"
+require "core.keymaps"
+require "core.options"
+require "core.plugins"
+require "core.plugin-config"
