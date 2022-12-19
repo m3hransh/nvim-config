@@ -10,6 +10,7 @@ local opts = { noremap = true, silent = true }
 local function conf(new_opts)
   return vim.tbl_extend("force", opts, new_opts)
 end
+
 -- local term_opts = { silent = true }
 
 -- Shorten function name
@@ -40,16 +41,16 @@ keymap(
   "n",
   "<leader>f",
   "<cmd>lua require('telescope.builtin').find_files("
-    .. "vim.tbl_deep_extend('force', require('telescope.themes').get_dropdown{previewer = false},"
-    .. "{find_command = {'rg', '--files', '--hidden', '-g', '!.git' }}))<CR>",
+  .. "vim.tbl_deep_extend('force', require('telescope.themes').get_dropdown{previewer = false},"
+  .. "{find_command = {'rg', '--files', '--hidden', '-g', '!.git' }}))<CR>",
   conf { desc = "Find Files" }
 )
 keymap(
   "n",
   "<leader>F",
   "<cmd>lua require('telescope.builtin').live_grep("
-    .. "vim.tbl_deep_extend('force', require('telescope.themes').get_ivy(),"
-    .. "{find_command = {'rg', '--files', '--hidden', '-g', '!.git' }}))<CR>",
+  .. "vim.tbl_deep_extend('force', require('telescope.themes').get_ivy(),"
+  .. "{find_command = {'rg', '--files', '--hidden', '-g', '!.git' }}))<CR>",
   conf { desc = "Find Files" }
 )
 keymap(
@@ -377,242 +378,8 @@ vim.api.nvim_set_keymap(
 )
 -- LSP
 
-local map = vim.api.nvim_buf_set_keymap
 
--- Conditional mapping based on server_capabilities
-local function map_cond(cap, b, m, key, cmd)
-  if cap then
-    map(b, m, key, cmd, opts)
-  end
-end
 
-local function which_cond(dict, cap, key, rhs, desc)
-  if cap then
-    dict[key] = { rhs, desc }
-  end
-end
-
-M.lsp_keymaps = function(client, bufnr)
-  local rc = client.server_capabilities
-  -- vim.pretty_print(rc)
-
-  -- Goto
-  local which_keymaps = {
-    name = "Goto",
-    l = {
-      name = "LSP",
-      i = { "<cmd>LspInfo<cr>", "LSP Info" },
-      I = { "<cmd>LspInstallInfo<cr>", "LSP Installer Info" },
-      c = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Actions" },
-      l = { "<cmd>Telescope diagnostics<CR>", "Diagnostics List" },
-      d = {
-        '<cmd>lua vim.diagnostic.open_float({border ="rounded" })<CR>',
-        "Show Diagnostc",
-      },
-      q = { "<cmd>lua vim.diagnostic.setloclist()<CR>", "Quickfix" },
-    },
-  }
-  which_cond(
-    which_keymaps,
-    rc.declarationProvider,
-    "D",
-    "<cmd>lua vim.lsp.buf.declaration()<CR>",
-    "Goto Declaration"
-  )
-  which_cond(
-    which_keymaps,
-    rc.definitionProvider,
-    "d",
-    "<cmd>lua vim.lsp.buf.definition()<CR>",
-    "Goto Definition"
-  )
-  which_cond(
-    which_keymaps,
-    rc.implementationProvider,
-    "i",
-    "<cmd>lua vim.lsp.buf.implementation()<CR>",
-    "Goto Implementation"
-  )
-  which_cond(
-    which_keymaps,
-    rc.typeDefinitionProvider,
-    "t",
-    "<cmd>lua vim.lsp.buf.type_definition()<CR>",
-    "Goto Type Definition"
-  )
-
-  -- Help
-  map_cond(
-    rc.hoverProvider,
-    bufnr,
-    "n",
-    "K",
-    "<cmd>lua vim.lsp.buf.hover()<CR>",
-    conf { "Hover" }
-  )
-  map_cond(
-    rc.signatureHelpProvider,
-    bufnr,
-    "n",
-    "<C-k>",
-    "<cmd>lua vim.lsp.buf.signature_help()<CR>",
-    conf { "Signature Help" }
-  )
-
-  -- Code
-  which_cond(
-    which_keymaps.l,
-    rc.codeActionProvider,
-    "a",
-    "<cmd>lua vim.lsp.buf.code_action()<CR>",
-    "Code Actions"
-  )
-  which_cond(
-    which_keymaps.l,
-    true,
-    "f",
-    "<cmd>lua vim.lsp.buf.format { async=false }<CR>",
-    "Format"
-  )
-  which_cond(
-    which_keymaps.l,
-    rc.referencesProvider,
-    "r",
-    "<cmd>Telescope lsp_references<CR>",
-    "References"
-  )
-  which_cond(
-    which_keymaps.l,
-    rc.renameProvider,
-    "R",
-    "<cmd>lua vim.lsp.buf.rename()<CR>",
-    "Rename"
-  )
-  which_cond(
-    which_keymaps.l,
-    rc.documentSymbolProvider,
-    "s",
-    "<cmd>Telescope lsp_document_symbols<cr>",
-    "Document Symbols"
-  )
-  which_cond(
-    which_keymaps.l,
-    rc.workspaceSymbolProvider,
-    "S",
-    "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
-    "Workspace Symbols"
-  )
-  which_key.register(
-    which_keymaps,
-    { buffer = bufnr, prefix = "g", nowait = false, noremap = true }
-  )
-
-  -- Diagnostics
-  map(
-    bufnr,
-    "n",
-    "[d",
-    '<cmd>lua vim.diagnostic.goto_prev({ border = "rounded" })<CR>',
-    opts
-  )
-  map(
-    bufnr,
-    "n",
-    "]d",
-    '<cmd>lua vim.diagnostic.goto_next({ border = "rounded" })<CR>',
-    opts
-  )
-  -- Workspace
-  map(
-    bufnr,
-    "n",
-    "<leader>wa",
-    "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>",
-    opts
-  )
-  map(
-    bufnr,
-    "n",
-    "<leader>wr",
-    "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>",
-    opts
-  )
-  map(
-    bufnr,
-    "n",
-    "<leader>wl",
-    "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
-    opts
-  )
-
-  -- Debugging
-  keymap(
-    "n",
-    "<leader>dc",
-    "<cmd>Telescope dap commands<cr>",
-    conf { desc = "Vertical Terminal" }
-  )
-  if client.name == "gopls" then
-    -- Go plugin already added debugging keymaps
-    map(bufnr, "n", "<leader>dd", "<cmd>GoDebug<CR>", opts)
-    map(bufnr, "n", "<leader>db", "<cmd>GoBreakToggle<CR>", opts)
-    map(bufnr, "n", "<leader>ds", "<cmd>GoDebug -s<CR>", opts)
-    -- For other languages
-  else
-    map(
-      bufnr,
-      "n",
-      "<leader>dd",
-      "<cmd>lua require'dapui'.toggle()<CR>",
-      conf { desc = "Open Debugging" }
-    )
-    map(
-      bufnr,
-      "n",
-      "<leader>db",
-      "<cmd>lua require'dap'.toggle_breakpoint()<CR>",
-      conf { desc = "Toggle Breakpoint" }
-    )
-    map(
-      bufnr,
-      "n",
-      "<leader>dg",
-      "<cmd>lua require'dap'.continue()<CR>",
-      conf { desc = "Continue" }
-    )
-    map(
-      bufnr,
-      "n",
-      "<leader>dn",
-      "<cmd>lua require'dap'.step_over()<CR>",
-      conf { desc = "Step Over" }
-    )
-    map(
-      bufnr,
-      "n",
-      "<leader>di",
-      "<cmd>lua require'dap'.step_into()<CR>",
-      conf { desc = "Step Into" }
-    )
-    map(
-      bufnr,
-      "n",
-      "<leader>do",
-      "<cmd>lua require'dap'.step_out()<CR>",
-      conf { desc = "Step Out" }
-    )
-    map(
-      bufnr,
-      "n",
-      "<leader>ds",
-      "<cmd>lua require'dap'.close()<CR>",
-      conf { desc = "Close Debugging" }
-    )
-  end
-
-  -- you can use <leader>lf for formatting
-  vim.cmd [[ command! Format execute 'lua vim.lsp.buf.format {async = true}' ]]
-end
 -- URL handling
 -- source: https://sbulav.github.io/vim/neovim-opening-urls/
 if vim.fn.has "mac" == 1 then
@@ -636,7 +403,7 @@ else
 end
 -- Java
 
-local opts = {
+local nopts = {
   mode = "n", -- NORMAL mode
   prefix = "<leader>",
   buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
@@ -696,7 +463,7 @@ local vmappings = {
   },
 }
 
-which_key.register(mappings, opts)
+which_key.register(mappings, nopts)
 which_key.register(vmappings, vopts)
 -- Terminal --
 -- Better terminal navigation

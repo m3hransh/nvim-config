@@ -98,24 +98,13 @@ return packer.startup(function(use)
   use "L3MON4D3/LuaSnip"
   use "rafamadriz/friendly-snippets"
 
-  -- LSP
   use {
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
     "neovim/nvim-lspconfig",
-    -- opt = true,
-    -- event = "BufReadPre",
-    wants = {
-      "cmp-nvim-lsp",
-      "nvim-lsp-installer",
-      "lua-dev.nvim",
-    },
-    requires = {
-      "williamboman/nvim-lsp-installer",
-      "folke/lua-dev.nvim",
-    },
-  }
+}
+
   use "jose-elias-alvarez/null-ls.nvim"
-  use "ray-x/go.nvim"
-  use "ray-x/guihua.lua" -- floating window support
 
   -- Java
   use { "mfussenegger/nvim-jdtls", ft = { "java" } }
