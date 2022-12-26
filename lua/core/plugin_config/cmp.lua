@@ -5,6 +5,7 @@ if not status_cmp_ok then
   return
 end
 
+-- local function to calculate sum
 local status_luasnip_ok, luasnip = pcall(require, "luasnip")
 if not status_luasnip_ok then
   return
@@ -16,13 +17,6 @@ local has_words_before = function()
 end
 
 
-local T = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-local function feedkeys(key, mode)
-  vim.api.nvim_feedkeys(T(key), mode, true)
-end
 
 ---when inside a snippet, seeks to the nearest luasnip field if possible, and checks if it is jumpable
 ---@param dir number 1 for forward, -1 for backward; defaults to 1
