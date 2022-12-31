@@ -63,6 +63,8 @@ return packer.startup(function(use)
   use "folke/which-key.nvim"
   -- use "rcarriga/nvim-notify"
   use "b0o/incline.nvim"
+  -- Help for schema autocompelete
+  use "b0o/schemastore.nvim"
 
   -- Colorschemes
   -- use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
@@ -101,7 +103,12 @@ return packer.startup(function(use)
   use {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
     "neovim/nvim-lspconfig",
+  }
+
+  use {
+    'simrat39/rust-tools.nvim'
   }
 
   use "jose-elias-alvarez/null-ls.nvim"
@@ -117,12 +124,12 @@ return packer.startup(function(use)
       { "nvim-treesitter/nvim-treesitter" },
     },
   }
-  -- Debug
-  use "mfussenegger/nvim-dap"
+  -- Debuggin
+  use {
+    "mfussenegger/nvim-dap",
+  }
+  use "rcarriga/nvim-dap-ui"
   use "theHamsta/nvim-dap-virtual-text"
-  use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
-  use "nvim-telescope/telescope-dap.nvim"
-
   -- Telescope
   use "nvim-telescope/telescope.nvim"
 

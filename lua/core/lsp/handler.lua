@@ -65,7 +65,7 @@ M.setup = function()
   })
 end
 M.on_attach = function(client, bufnr)
-  require("core.lsp.lsp_mapping").setup(client, bufnr)
+  require("core.lsp.keymaps").setup(client, bufnr)
   lsp_highlight(client, bufnr)
 end
 return M
