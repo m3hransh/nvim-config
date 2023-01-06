@@ -40,13 +40,11 @@ function M.setup(servers, options)
     end,
     -- Next, you can provide a dedicated handler for specific servers.
     -- For example, a handler override for the `rust_analyzer`:
-    ["sumneko_lua"] = function()
-      local opts = vim.tbl_deep_extend("force", options, servers["sumneko_lua"] or {})
-
-    end,
     ["jdtls"] = function()
-      -- print "jdtls is handled by nvim-jdtls"
-      -- TODO: add java support
+      -- print "jdtls is handled by nvim-jdtls" TODO: add java support
+      --[[ require("jdtls").setup_dap { hotcodereplace = "auto" } ]]
+      --[[ require("jdtls.dap").setup_dap_main_class_configs() ]]
+      --[[ vim.lsp.codelens.refresh() ]]
     end,
     ["rust_analyzer"] = function()
 

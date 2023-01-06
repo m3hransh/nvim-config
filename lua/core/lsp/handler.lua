@@ -65,6 +65,13 @@ M.setup = function()
   })
 end
 M.on_attach = function(client, bufnr)
+  if client.name == "jdtls" then
+    -- client.server_capabilities.documentFormattingProvider = false
+    vim.lsp.codelens.refresh()
+    require("jdtls").setup_dap { hotcodereplace = "auto" }
+    require("jdtls.dap").setup_dap_main_class_configs()
+    require("jdtls.setup").add_commands()
+  end
   require("core.lsp.keymaps").setup(client, bufnr)
   lsp_highlight(client, bufnr)
 end
