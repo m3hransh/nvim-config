@@ -20,7 +20,7 @@ local options = {
 	splitbelow = true, -- force all horizontal splits to go below current window
 	splitright = true, -- force all vertical splits to go to the right of current window
 	swapfile = false, -- creates a swapfile
-	laststatus = 3, -- make status line global
+	-- laststatus = 3, -- make status line global
 	-- termguicolors = true,                    -- set term gui colors (most terminals support this)
 	timeoutlen = 200, -- time to wait for a mapped sequence to complete (in milliseconds)
 	undofile = true, -- enable persistent undo
@@ -38,6 +38,7 @@ local options = {
 	scrolloff = 8, -- is one of my fav
 	sidescrolloff = 8,
 	guifont = "JetBrainsMono Nerd Font:h16", -- the font used in graphical neovim applications
+	conceallevel = 1,
 }
 
 vim.opt.shortmess:append("c")

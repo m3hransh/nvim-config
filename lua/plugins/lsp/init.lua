@@ -52,10 +52,17 @@ return {
 			end
 		end,
 	},
+
+	{
+		"jay-babu/mason-nvim-dap.nvim",
+		event = "BufReadPre",
+		opts = { ensure_installed = { "python", "delve" } },
+		dependencies = { "mason.nvim" },
+	},
 	{
 		"jose-elias-alvarez/null-ls.nvim",
 		event = "BufReadPre",
-		dependencies = { "mason.nvim" },
+		dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-dap" },
 		opts = function()
 			local nls = require("null-ls")
 			return {
@@ -115,20 +122,20 @@ return {
 		event = "BufEnter  *.ts,*.tsx",
 		opts = {},
 	},
-	-- {
-	-- 	"mrcjkb/haskell-tools.nvim",
-	-- 	version = "^3", -- Recommended
-	-- 	lazy = false, -- This plugin is already lazy
-	-- 	keys = {
-	-- 		{
-	-- 			"<leader>lhs",
-	-- 			function()
-	-- 				require("haskell-tools").hoogle.hoogle_signature()
-	-- 			end,
-	-- 			desc = "Toggle Haskell Tools",
-	-- 		},
-	-- 	},
-	-- },
+	{
+		"mrcjkb/haskell-tools.nvim",
+		version = "^3", -- Recommended
+		lazy = false, -- This plugin is already lazy
+		keys = {
+			{
+				"<leader>lhs",
+				function()
+					require("haskell-tools").hoogle.hoogle_signature()
+				end,
+				desc = "Toggle Haskell Tools",
+			},
+		},
+	},
 	-- {
 	-- 	"elixir-tools/elixir-tools.nvim",
 	-- 	version = "*",

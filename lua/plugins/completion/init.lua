@@ -54,7 +54,7 @@ return {
 							end
 						end,
 					}),
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
+					-- ["<CR>"] = cmp.mapping.confirm({ select = true }),
 					["<C-j>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.select_next_item()
@@ -85,9 +85,9 @@ return {
 					}),
 				}),
 				sources = cmp.config.sources({
-					{ name = "copilot" },
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lsp" },
+					{ name = "copilot" },
 					{ name = "luasnip" },
 					{ name = "buffer" },
 					{ name = "path" },
@@ -137,6 +137,15 @@ return {
 				}, {
 					{ name = "cmdline" },
 				}),
+			})
+
+			-- Setup vim-dadbod completion
+			cmp.setup.filetype({ "sql", "mysql" }, {
+				sources = {
+					{ name = "vim-dadbod-completion" },
+					{ name = "buffer" },
+					{ name = "copilot", keyword_length = 2 },
+				},
 			})
 		end,
 	},

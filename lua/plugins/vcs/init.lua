@@ -12,7 +12,7 @@ return {
 			disable_commit_confirmation = true,
 		},
 		keys = {
-			{ "<leader>gs", "<cmd>Neogit kind=tab<cr>", desc = "Status" },
+			{ "<leader>gn", "<cmd>Neogit kind=tab<cr>", desc = "Status" },
 		},
 	},
 	{
@@ -83,13 +83,14 @@ return {
 				end, { expr = true })
 
 				-- Actions
-				map({ "n", "v" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", { desc = "Stage Hunk" })
-				map({ "n", "v" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", { desc = "Reset Hunk" })
-				map("n", "<leader>ghS", gs.stage_buffer, { desc = "Stage Buffer" })
-				map("n", "<leader>ghu", gs.undo_stage_hunk, { desc = "Undo Stage Hunk" })
-				map("n", "<leader>ghR", gs.reset_buffer, { desc = "Reset Buffer" })
-				map("n", "<leader>ghp", gs.preview_hunk, { desc = "Preview Hunk" })
-				map("n", "<leader>ghb", function()
+				map({ "n", "v" }, "<leader>gs", ":Gitsigns stage_hunk<CR>", { desc = "Stage Hunk" })
+				map({ "n", "v" }, "<leader>gr", ":Gitsigns reset_hunk<CR>", { desc = "Reset Hunk" })
+				map({ "n", "v" }, "<leader>gf", ":Telescope git_status<CR>", { desc = "File changed" })
+				map("n", "<leader>gS", gs.stage_buffer, { desc = "Stage Buffer" })
+				map("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Undo Stage Hunk" })
+				map("n", "<leader>gR", gs.reset_buffer, { desc = "Reset Buffer" })
+				map("n", "<leader>gp", gs.preview_hunk, { desc = "Preview Hunk" })
+				map("n", "<leader>gb", function()
 					gs.blame_line({ full = true })
 				end, { desc = "Blame Line" })
 				map("n", "<leader>gtb", gs.toggle_current_line_blame, { desc = "Toggle Line Blame" })

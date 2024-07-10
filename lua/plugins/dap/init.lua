@@ -112,9 +112,9 @@ return {
 			end
 
 			-- set up debugger
-			for k, _ in pairs(opts.setup) do
-				opts.setup[k](plugin, opts)
-			end
+			-- for k, _ in pairs(opts.setup) do
+			-- 	opts.setup[k](plugin, opts)
+			-- end
 		end,
 	},
 }

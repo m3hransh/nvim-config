@@ -57,30 +57,6 @@ local function lsp_init()
 	-- Signature help configuration
 	-- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, config.float)
 end
--- angular specific configuration
-local ok, mason_registry = pcall(require, "mason-registry")
-if not ok then
-	vim.notify("mason-registry could not be loaded")
-	return
-end
-local angularls_path = mason_registry.get_package("angular-language-server"):get_install_path()
-
-local angular_cmd = {
-	"ngserver",
-	"--stdio",
-	"--tsProbeLocations",
-	table.concat({
-		angularls_path,
-		vim.uv.cwd(),
-	}, ","),
-	"--ngProbeLocations",
-	table.concat({
-		angularls_path .. "/node_modules/@angular/language-server",
-		vim.uv.cwd(),
-	}, ","),
-}
-local util = require("lspconfig.util")
-local angular_root_dir = util.root_pattern(".git", "project.json")
 
 function M.setup(_, opts)
 	lsp_utils.on_attach(function(client, bufnr)
@@ -108,11 +84,7 @@ function M.setup(_, opts)
 			end
 		end
 		if server == "angularls" then
-			server_opts.cmd = angular_cmd
-			server_opts.on_new_config = function(new_config, new_root_dir)
-				new_config.cmd = cmd
-			end
-			server_opts.root_dir = angular_root_dir
+			server_opts.root_dir = require("lspconfig.util").root_pattern("package.json", "project.json")
 		end
 		require("lspconfig")[server].setup(server_opts)
 	end

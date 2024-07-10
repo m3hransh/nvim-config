@@ -3,24 +3,24 @@ return {
 	cmd = "Telescope",
 	keys = {
 		{
-			"<leader>ff",
+			"<leader>f",
 			"<cmd>lua require('telescope.builtin').find_files("
-				.. "vim.tbl_deep_extend('force', require('telescope.themes').get_dropdown{previewer = false},"
+				.. "vim.tbl_deep_extend('force', require('telescope.themes').get_dropdown(),"
 				.. "{find_command = {'rg', '--files', '--hidden', '-g', '!.git' }}))<CR>",
 			desc = "Find Files",
 		},
 		{
-			"<leader>fr",
+			"<leader>R",
 			"<cmd>Telescope oldfiles<cr>",
 			desc = "Recent",
 		},
 		{
-			"<leader>fb",
-			"<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
+			"<leader>b",
+			"<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown())<cr>",
 			desc = "Buffers",
 		},
 		{
-			"<leader>fg",
+			"<leader>tg",
 			"<cmd>Telescope git_files<cr>",
 			desc = "Git Files",
 		},
@@ -30,11 +30,26 @@ return {
 			desc = "Projects",
 		},
 		{
-			"<leader>f/",
+			"<leader>F",
 			"<cmd>lua require('telescope.builtin').live_grep("
 				.. "vim.tbl_deep_extend('force', require('telescope.themes').get_ivy(),"
 				.. "{find_command = {'rg', '--files', '--hidden', '-g', '!.git' }}))<CR>",
 			desc = "Grep",
+		},
+		-- in visual mode
+		{
+			"<leader>F",
+			"<cmd>lua require('telescope.builtin').grep_string("
+				.. "vim.tbl_deep_extend('force', require('telescope.themes').get_ivy(),"
+				.. "{find_command = {'rg', '--files', '--hidden', '-g', '!.git' }}))<CR>",
+			desc = "Grep",
+			mode = "v",
+		},
+		{
+			"<leader><tab>",
+			"<cmd>lua require('telescope.builtin').commands()<cr>",
+			desc = "Help",
+			noremap = false,
 		},
 	},
 	config = true,

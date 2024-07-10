@@ -48,7 +48,6 @@ keymap("n", "<S-Down>", "<cmd>resize -2<CR>")
 keymap("n", "<S-Left>", "<cmd>vertical resize -2<CR>")
 keymap("n", "<S-Right>", "<cmd>vertical resize +2<CR>")
 
-
 -- Better window navigation
 keymap("n", "<C-h>", "<C-w>h", opts)
 keymap("n", "<C-j>", "<C-w>j", opts)
@@ -64,10 +63,10 @@ keymap("n", "<C-S>", ":update<CR>", opts)
 keymap("v", "<C-S>", "<C-C>:update<CR>", opts)
 keymap("i", "<C-S>", "<C-O>:update<CR>", opts)
 
-keymap("n", "<leader>x", ":q!<CR>", conf { desc = "Quit" })
-keymap("n", "<leader>X", ":qa!<CR>", conf { desc = "Quit All" })
-keymap("n", "<leader>c", ":Bdelete!<CR>", conf { desc = "Close Buffer" })
-keymap("n", "<leader>h", ":nohlsearch<CR>", conf { desc = "No Highlight" })
+keymap("n", "<leader>x", ":q!<CR>", conf({ desc = "Quit" }))
+keymap("n", "<leader>X", ":qa!<CR>", conf({ desc = "Quit All" }))
+keymap("n", "<leader>c", ":Bdelete!<CR>", conf({ desc = "Close Buffer" }))
+keymap("n", "<leader>h", ":nohlsearch<CR>", conf({ desc = "No Highlight" }))
 
 -- Switch between the last two files
 keymap("n", "<leader><leader>", "<c-^>", opts)
