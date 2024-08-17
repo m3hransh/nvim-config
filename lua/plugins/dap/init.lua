@@ -1,20 +1,20 @@
 return {
-	{
-		"folke/which-key.nvim",
-		event = "VeryLazy",
-		opts = {
-			defaults = {
-				["<leader>d"] = { name = "+DAP" },
-			},
-		},
-	},
-	{
-		"mfussenegger/nvim-dap",
-		dependencies = {
-			{ "rcarriga/nvim-dap-ui" },
-			{ "theHamsta/nvim-dap-virtual-text" },
-			{ "nvim-neotest/nvim-nio" },
-		},
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      defaults = {
+        ["<leader>d"] = { name = "+DAP" },
+      },
+    },
+  },
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      { "rcarriga/nvim-dap-ui" },
+      { "theHamsta/nvim-dap-virtual-text" },
+      { "nvim-neotest/nvim-nio" },
+    },
     -- stylua: ignore
     keys = {
       { "<leader>dR", function() require("dap").run_to_cursor() end, desc = "Run to Cursor", },
@@ -92,29 +92,59 @@ return {
       { "<leader>dx", function() require("dap").terminate() end, desc = "Terminate", },
       { "<leader>du", function() require("dap").step_out() end,  desc = "Step Out", },
     },
-		opts = {},
-		config = function(plugin, opts)
-			require("nvim-dap-virtual-text").setup({
-				commented = true,
-			})
+    opts = {},
+    config = function(plugin, opts)
+      require("nvim-dap-virtual-text").setup({
+        commented = true,
+      })
 
-			local dap, dapui = require("dap"), require("dapui")
-			dapui.setup({})
+      local dap, dapui = require("dap"), require("dapui")
+      dapui.setup({})
 
-			dap.listeners.after.event_initialized["dapui_config"] = function()
-				dapui.open()
-			end
-			dap.listeners.before.event_terminated["dapui_config"] = function()
-				dapui.close()
-			end
-			dap.listeners.before.event_exited["dapui_config"] = function()
-				dapui.close()
-			end
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close()
+      end
 
-			-- set up debugger
-			-- for k, _ in pairs(opts.setup) do
-			-- 	opts.setup[k](plugin, opts)
-			-- end
-		end,
-	},
+      -- TODO: DAP for Elixir didn't work
+
+      -- set up debugger
+      -- for k, _ in pairs(opts.setup) do
+      -- 	opts.setup[k](plugin, opts)
+      -- end
+      -- local elixir_ls_debugger = vim.fn.exepath "elixir-ls-debugger"
+      -- if elixir_ls_debugger then
+      --   dap.adapters.mix_task = {
+      --     type = 'executable',
+      --     command = elixir_ls_debugger, -- https://github.com/williamboman/mason.nvim/blob/d97579ccd5689f9c6c365e841ea99c27954112ec/lua/mason-registry/elixir-ls/init.lua#L26
+      --     args = {},
+      --   }
+      -- dap.configurations.elixir = {
+      --   {
+      --     type = "mix_task",
+      --     request = "launch",
+      --     name = "Mix Run",
+      --     task = "run",
+      --     cwd = "${workspaceFolder}",
+      --     args = {},
+      --     mix_env = "dev",
+      --   },
+      --   {
+      --     type = "mix_task",
+      --     request = "launch",
+      --     name = "Mix Test",
+      --     task = "test",
+      --     cwd = "${workspaceFolder}",
+      --     args = {},
+      --     mix_env = "test",
+      --   },
+      -- }
+      -- end
+    end,
+  },
 }

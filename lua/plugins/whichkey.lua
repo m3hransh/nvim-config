@@ -6,29 +6,32 @@ return {
     wk.setup {
       show_help = false,
       plugins = { spelling = true },
-      key_labels = { ["<leader>"] = "SPC" },
-      triggers = "auto",
-    }
-    wk.register ({
-      w = { "<cmd>update!<CR>", "Save" },
-      q = { "<cmd>lua require('util').smart_quit()<CR>", "Quit" },
-      f = { name = "+File" },
-      g = { name = "+Git" },
-      c = {
-        name = "+Code",
-        x = {
-          name = "Swap Next",
-          f = "Function",
-          p = "Parameter",
-          c = "Class",
+      replace = {
+        key = {
+          function(key)
+            return require("which-key.view").format(key)
+          end,
+          { "<Space>", "SPC" },
         },
-        X = {
-          name = "Swap Previous",
-          f = "Function",
-          p = "Parameter",
-          c = "Class",
+        desc = {
+          { "<Plug>%(?(.*)%)?", "%1" },
+          { "^%+",              "" },
+          { "<[cC]md>",         "" },
+          { "<[cC][rR]>",       "" },
+          { "<[sS]ilent>",      "" },
+          { "^lua%s+",          "" },
+          { "^call%s+",         "" },
+          { "^:%s*",            "" },
         },
       },
-    }, {prefix = "<leader>"})
+      triggers = {
+        { "<auto>", mode = "nxsot" },
+      }
+    }
+    wk.add({
+      { "<leader>w", proxy = "<c-w>", group = "Windows" },
+      { "<leader>g", "Git" },
+      { "<leader>c", "Code" },
+    })
   end,
 }
