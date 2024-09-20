@@ -14,6 +14,21 @@ return {
         dockerls = {},
         lua_ls = {},
         gleam = {},
+        pyright = {
+          settings = {
+            pyright = {
+              -- Using Ruff's import organizer
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                -- Ignore all files for analysis to exclusively use Ruff for linting
+                ignore = { '*' },
+              },
+            },
+          },
+        },
+        ruff = {},
       },
       setup = {},
       format = {
@@ -67,11 +82,12 @@ return {
   --   end,
   -- },
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",
     event = "BufReadPre",
     dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-dap" },
     opts = function()
       local nls = require("null-ls")
+      print(nls.builtins.formatting)
       return {
         root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git"),
         sources = {
@@ -82,7 +98,7 @@ return {
   },
   {
     "jay-babu/mason-null-ls.nvim",
-    opts = { ensure_installed = nil, automatic_installation = true, automatic_setup = false },
+    opts = { ensure_installed = { "ruff" }, automatic_installation = true, automatic_setup = false },
   },
   {
     "utilyre/barbecue.nvim",
