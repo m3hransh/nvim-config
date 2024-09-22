@@ -14,21 +14,31 @@ return {
         dockerls = {},
         lua_ls = {},
         gleam = {},
-        pyright = {
+        pylsp = {
           settings = {
-            pyright = {
-              -- Using Ruff's import organizer
-              disableOrganizeImports = true,
-            },
-            python = {
-              analysis = {
-                -- Ignore all files for analysis to exclusively use Ruff for linting
-                ignore = { '*' },
+            pylsp = {
+              plugins = {
+                pycodestyle = { enabled = false },
+                yapf = { enabled = false },
               },
-            },
-          },
+            }
+          }
         },
-        ruff = {},
+        -- pyright = {
+        --   settings = {
+        --     pyright = {
+        --       -- Using Ruff's import organizer
+        --       disableOrganizeImports = true,
+        --     },
+        --     python = {
+        --       analysis = {
+        --         -- Ignore all files for analysis to exclusively use Ruff for linting
+        --         ignore = { '*' },
+        --       },
+        --     },
+        --   },
+        -- },
+        -- ruff = {},
       },
       setup = {},
       format = {
@@ -82,24 +92,25 @@ return {
   --   end,
   -- },
   {
-    "nvimtools/none-ls.nvim",
+    "m3hransh/none-ls.nvim",
     event = "BufReadPre",
     dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-dap" },
     opts = function()
       local nls = require("null-ls")
-      print(nls.builtins.formatting)
       return {
         root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git"),
         sources = {
           nls.builtins.formatting.shfmt,
+          nls.builtins.diagnostics.ruff,
+          nls.builtins.formatting.ruff
         },
       }
     end,
   },
-  {
-    "jay-babu/mason-null-ls.nvim",
-    opts = { ensure_installed = { "ruff" }, automatic_installation = true, automatic_setup = false },
-  },
+  -- {
+  --   "jay-babu/mason-null-ls.nvim",
+  --   opts = { ensure_installed = {}, automatic_installation = true, automatic_setup = false },
+  -- },
   {
     "utilyre/barbecue.nvim",
     event = "VeryLazy",
