@@ -14,30 +14,45 @@ return {
         dockerls = {},
         lua_ls = {},
         gleam = {},
-        pylsp = {
-          settings = {
-            pylsp = {
-              plugins = {
-                pycodestyle = { enabled = false },
-                yapf = { enabled = false },
-              },
+        ruff = {
+          init_options = {
+            settings = {
+              logFile = "~/ruff.log",
+              logLevel = "debug",
+              organizeImports = true,
             }
+
           }
         },
-        -- pyright = {
+        -- pylsp = {
         --   settings = {
-        --     pyright = {
-        --       -- Using Ruff's import organizer
-        --       disableOrganizeImports = true,
-        --     },
-        --     python = {
-        --       analysis = {
-        --         -- Ignore all files for analysis to exclusively use Ruff for linting
-        --         ignore = { '*' },
+        --     pylsp = {
+        --       plugins = {
+        --         pycodestyle = { enabled = false },
+        --         yapf = { enabled = false },
+        --         pylint = { enabled = true, executable = "pylint" },
+        --         pyflakes = { enabled = false },
+        --         -- type checker
+        --         pylsp_mypy = { enabled = true },
         --       },
-        --     },
-        --   },
+        --     }
+        --   }
         -- },
+        pyright = {
+          settings = {
+            pyright = {
+              --       -- Using Ruff's import organizer
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                --         -- Ignore all files for analysis to exclusively use Ruff for linting
+                reportMissingTypeStubs = true,
+                --         ignore = { '*' },
+              },
+            },
+          },
+        },
         -- ruff = {},
       },
       setup = {},
@@ -101,8 +116,24 @@ return {
         root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git"),
         sources = {
           nls.builtins.formatting.shfmt,
-          nls.builtins.diagnostics.ruff,
-          nls.builtins.formatting.ruff
+          -- nls.builtins.diagnostics.ruff.with(
+          --   {
+          --     args = {
+          --       "check",
+          --       "--select",
+          --       "I",
+          --       "--stdin-filename",
+          --       "$FILENAME",
+          --       "-",
+          --     }
+          --   }
+          -- ),
+          -- nls.builtins.formatting.ruff.with({
+          --
+          --   args = {
+          --     "check", "--fix", "--select", "I", "--stdin-filename", "$FILENAME", "-" }
+          -- })
+
         },
       }
     end,
@@ -146,10 +177,19 @@ return {
   {
     "Bekaboo/dropbar.nvim",
     event = "VeryLazy",
+    dependencies = { "nvim-telescope/telescope-fzf-native.nvim" },
+    keys = { {
+      "<leader>;",
+      function()
+        require('dropbar.api').pick()
+      end,
+      desc = "Toggle dropbar",
+    } },
     enabled = function()
       return vim.fn.has("nvim-0.10.0") == 1
     end,
   },
+  { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' },
   {
     "pmizio/typescript-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
@@ -231,5 +271,5 @@ return {
       },
     },
   },
-  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+  { "Bilal2453/luvit-meta",                     lazy = true }, -- optional `vim.uv` typings
 }

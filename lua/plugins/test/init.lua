@@ -49,7 +49,7 @@ return {
             -- Returns if a given file path is a test file.
             -- NB: This function is called a lot so don't perform any heavy tasks within it.
             is_test_file = function(file_path)
-              return file_path:match("tests/unit/cmk/plugins/collection")
+              return file_path:match("tests/unit/")
             end,
             -- !!EXPERIMENTAL!! Enable shelling out to `pytest` to discover test
             -- instances for files containing a parametrize mark (default: false)
