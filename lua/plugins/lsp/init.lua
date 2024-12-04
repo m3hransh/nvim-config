@@ -130,8 +130,24 @@ return {
     opts = {},
   },
   {
+    'dense-analysis/ale',
+    event = "BufEnter  *.hs,*.hls",
+    config = function()
+      -- Configuration goes here.
+      local g = vim.g
+
+      g.ale_ruby_rubocop_auto_correct_all = 1
+
+      g.ale_linters = {
+        -- ruby = { 'rubocop', 'ruby' },
+        lua = { 'lua_language_server' },
+        haskell = { 'stack-build' }
+      }
+    end
+  },
+  {
     "mrcjkb/haskell-tools.nvim",
-    version = "^3", -- Recommended
+    version = "^4", -- Recommended
     lazy = false,   -- This plugin is already lazy
     keys = {
       {
@@ -205,4 +221,13 @@ return {
     },
   },
   { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+  {
+    "lervag/vimtex",
+    lazy = false, -- we don't want to lazy load VimTeX
+    -- tag = "v2.15", -- uncomment to pin to a specific release
+    init = function()
+      -- VimTeX configuration goes here, e.g.
+      vim.g.vimtex_view_method = "zathura"
+    end
+  }
 }

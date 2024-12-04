@@ -88,7 +88,6 @@ return {
           { name = "nvim_lsp_signature_help" },
           { name = "nvim_lsp",               priority = 2 },
           { name = "copilot" },
-          { name = "copilot" },
           { name = "luasnip" },
           { name = "buffer" },
           { name = "path" },
@@ -109,7 +108,7 @@ return {
             local duplicates = {
               buffer = 1,
               path = 1,
-              nvim_lsp = 0,
+              nvim_lsp = nil,
               luasnip = 1,
             }
             local duplicates_default = 0
