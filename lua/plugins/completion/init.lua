@@ -160,8 +160,9 @@ return {
       end,
     },
     config = {
-      history = true,
+      exit_roots = true,
       delete_check_events = "TextChanged",
+      region_check_events = "CursorMoved",
     },
     -- stylua: ignore
     keys = {
