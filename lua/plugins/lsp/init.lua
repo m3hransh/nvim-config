@@ -14,6 +14,46 @@ return {
         dockerls = {},
         lua_ls = {},
         gleam = {},
+        ruff = {
+          init_options = {
+            settings = {
+              logFile = "~/ruff.log",
+              logLevel = "debug",
+              organizeImports = true,
+            }
+
+          }
+        },
+        pylsp = {
+          settings = {
+            pylsp = {
+              plugins = {
+                pycodestyle = { enabled = false },
+                yapf = { enabled = false },
+                pylint = { enabled = true, executable = "pylint" },
+                pyflakes = { enabled = false },
+                -- type checker
+                pylsp_mypy = { enabled = true },
+              },
+            }
+          }
+        },
+        pyright = {
+          settings = {
+            pyright = {
+              --       -- Using Ruff's import organizer
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                --         -- Ignore all files for analysis to exclusively use Ruff for linting
+                reportMissingTypeStubs = true,
+                --         ignore = { '*' },
+              },
+            },
+          },
+        },
+        -- ruff = {},
       },
       setup = {},
       format = {

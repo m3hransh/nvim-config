@@ -43,7 +43,7 @@ return {
 
       ---@usage When set to false, you will get a message when project.nvim changes your directory.
       -- When set to false, you will get a message when project.nvim changes your directory.
-      silent_chdir = true,
+      silent_chdir = false,
 
       ---@usage list of lsp client names to ignore when using **lsp** detection. eg: { "efm", ... }
       ignore_lsp = {},
