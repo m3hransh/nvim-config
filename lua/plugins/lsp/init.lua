@@ -28,6 +28,10 @@ return {
           settings = {
             pylsp = {
               plugins = {
+                -- formatter options
+                black = { enabled = false },
+                autopep8 = { enabled = false },
+                yapf = { enabled = false },
                 pycodestyle = { enabled = false },
                 yapf = { enabled = false },
                 pylint = { enabled = true, executable = "pylint" },
@@ -235,7 +239,7 @@ return {
   -- },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "canary",
+    branch = "main",
     dependencies = {
       { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
       { "nvim-lua/plenary.nvim" },  -- for curl, log wrapper
