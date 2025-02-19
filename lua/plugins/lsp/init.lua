@@ -24,24 +24,24 @@ return {
 
           }
         },
-        pylsp = {
-          settings = {
-            pylsp = {
-              plugins = {
-                -- formatter options
-                black = { enabled = false },
-                autopep8 = { enabled = false },
-                yapf = { enabled = false },
-                pycodestyle = { enabled = false },
-                yapf = { enabled = false },
-                pylint = { enabled = true, executable = "pylint" },
-                pyflakes = { enabled = false },
-                -- type checker
-                pylsp_mypy = { enabled = true },
-              },
-            }
-          }
-        },
+        -- pylsp = {
+        --   settings = {
+        --     pylsp = {
+        --       plugins = {
+        --         -- formatter options
+        --         black = { enabled = false },
+        --         autopep8 = { enabled = false },
+        --         yapf = { enabled = false },
+        --         pycodestyle = { enabled = false },
+        --         yapf = { enabled = false },
+        --         pylint = { enabled = true, executable = "pylint" },
+        --         pyflakes = { enabled = false },
+        --         -- type checker
+        --         pylsp_mypy = { enabled = true },
+        --       },
+        --     }
+        --   }
+        -- },
         pyright = {
           settings = {
             pyright = {
@@ -57,7 +57,6 @@ return {
             },
           },
         },
-        -- ruff = {},
       },
       setup = {},
       format = {
