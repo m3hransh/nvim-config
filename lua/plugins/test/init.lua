@@ -95,6 +95,12 @@ return {
       { "<leader>tts", "<cmd>OverseerSaveBundle<cr>",   desc = "Save Bundle" },
       { "<leader>ttt", "<cmd>OverseerToggle<cr>",       desc = "Toggle" },
     },
-    opts = {},
+    config = function()
+      require("overseer").setup {
+        template = {
+          "builtin", "checkmk/f12"
+        },
+      }
+    end,
   }
 }

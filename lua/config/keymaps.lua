@@ -70,3 +70,86 @@ keymap("n", "<leader>h", ":nohlsearch<CR>", conf({ desc = "No Highlight" }))
 
 -- Switch between the last two files
 keymap("n", "<leader><leader>", "<c-^>", opts)
+
+vim.keymap.set('n', '<leader>u', function()
+  local file_dir = vim.fn.expand('%:p:h')
+  local cmd = { 'f12' } -- like { "npm", "run", "dev" }
+
+  local task_buf_name = '__TaskRunner__'
+  local task_buf = nil
+  local task_win = nil
+
+  -- Check if the buffer exists
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    local name = vim.api.nvim_buf_get_name(buf)
+    local short_name = vim.fn.fnamemodify(name, ":t") -- get only the tail (filename)
+    if short_name == task_buf_name then
+      task_buf = buf
+      break
+    end
+  end
+
+  -- Save current window to return focus to it later
+  local original_win = vim.api.nvim_get_current_win()
+
+  -- If the buffer doesn’t exist, create it
+  if not task_buf then
+    task_buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_name(task_buf, task_buf_name)
+    vim.bo[task_buf].buftype = 'nofile'
+    vim.bo[task_buf].bufhidden = 'hide'
+    vim.bo[task_buf].swapfile = false
+    vim.api.nvim_buf_set_keymap(task_buf, 'n', 'q', '<cmd>hide<CR>', { noremap = true, silent = true })
+  end
+
+  -- Open the buffer in a new bottom split only if it’s not visible
+  local is_open = false
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_buf(win) == task_buf then
+      is_open = true
+      task_win = win
+      break
+    end
+  end
+
+  if not is_open then
+    vim.cmd('botright split')
+    vim.cmd('resize 15')
+    task_win = vim.api.nvim_get_current_win()
+    vim.api.nvim_win_set_buf(task_win, task_buf)
+  end
+
+  -- Go back to the original window
+  vim.api.nvim_set_current_win(original_win)
+
+  -- Clear previous output
+  vim.api.nvim_buf_set_option(task_buf, 'modifiable', true)
+  vim.api.nvim_buf_set_lines(task_buf, 0, -1, false, {})
+  vim.api.nvim_buf_set_option(task_buf, 'modifiable', false)
+
+  -- Start the job and stream output
+  vim.fn.jobstart(cmd, {
+    cwd = file_dir,
+    stdout_buffered = false,
+    stderr_buffered = false,
+    on_stdout = function(_, data)
+      if data then
+        vim.api.nvim_buf_set_option(task_buf, 'modifiable', true)
+        vim.api.nvim_buf_set_lines(task_buf, -1, -1, false, data)
+        vim.api.nvim_buf_set_option(task_buf, 'modifiable', false)
+      end
+    end,
+    on_stderr = function(_, data)
+      if data then
+        vim.api.nvim_buf_set_option(task_buf, 'modifiable', true)
+        vim.api.nvim_buf_set_lines(task_buf, -1, -1, false, data)
+        vim.api.nvim_buf_set_option(task_buf, 'modifiable', false)
+      end
+    end,
+    on_exit = function()
+      vim.api.nvim_buf_set_option(task_buf, 'modifiable', true)
+      vim.api.nvim_buf_set_lines(task_buf, -1, -1, false, { '', '[Process completed]' })
+      vim.api.nvim_buf_set_option(task_buf, 'modifiable', false)
+    end,
+  })
+end, { desc = 'Stream command output in bottom split without affecting current buffer' })
