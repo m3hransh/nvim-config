@@ -82,6 +82,7 @@ return {
   },
   {
     "stevearc/overseer.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     keys = {
       { "<leader>ttR", "<cmd>OverseerRunCmd<cr>",       desc = "Run Command" },
       { "<leader>tta", "<cmd>OverseerTaskAction<cr>",   desc = "Task Action" },
@@ -95,12 +96,10 @@ return {
       { "<leader>tts", "<cmd>OverseerSaveBundle<cr>",   desc = "Save Bundle" },
       { "<leader>ttt", "<cmd>OverseerToggle<cr>",       desc = "Toggle" },
     },
-    config = function()
-      require("overseer").setup {
-        template = {
-          "builtin", "checkmk/f12"
-        },
-      }
+    config = function(opts)
+      require("overseer").setup({
+        templates = { "builtin", "checkmk.f12" },
+      })
     end,
   }
 }
