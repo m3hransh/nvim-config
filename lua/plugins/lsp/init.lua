@@ -50,9 +50,10 @@ return {
             },
             python = {
               analysis = {
-                --         -- Ignore all files for analysis to exclusively use Ruff for linting
-                reportMissingTypeStubs = true,
-                --         ignore = { '*' },
+                diagnosticSeverityOverrides = {
+                  reportTypedDictNotRequiredAccess = "none",
+                  reportPossiblyUnboundVariable = "warning"
+                },
               },
             },
           },
