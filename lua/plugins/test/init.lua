@@ -6,6 +6,7 @@ return {
       "nvim-treesitter/nvim-treesitter",
       "antoinemadec/FixCursorHold.nvim",
       "nvim-neotest/neotest-vim-test",
+      "nvim-neotest/neotest-plenary",
       "nvim-neotest/neotest-python",
       "vim-test/vim-test",
       "stevearc/overseer.nvim",
@@ -27,6 +28,7 @@ return {
     opts = function()
       return {
         adapters = {
+          require "neotest-plenary",
           require "neotest-vim-test" {
             ignore_file_types = { "python", "vim", "lua" },
           },
@@ -53,7 +55,7 @@ return {
             -- end,
             -- !!EXPERIMENTAL!! Enable shelling out to `pytest` to discover test
             -- instances for files containing a parametrize mark (default: false)
-            -- pytest_discover_instances = true,
+            pytest_discover_instances = true,
           }) },
         status = { virtual_text = true },
         output = { open_on_run = true },
