@@ -3,11 +3,11 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      { "folke/neoconf.nvim",      cmd = "Neoconf", config = true },
-      { "smjonas/inc-rename.nvim", config = true },
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
-      "jay-babu/mason-null-ls.nvim",
+      { "folke/neoconf.nvim",                cmd = "Neoconf",   config = true },
+      { "smjonas/inc-rename.nvim",           config = true },
+      { "williamboman/mason.nvim",           version = "^1.0.0" },
+      { "williamboman/mason-lspconfig.nvim", version = "^1.0.0" },
+      { "jay-babu/mason-null-ls.nvim",       version = "^1.0.0" },
     },
     opts = {
       servers = {
@@ -24,24 +24,24 @@ return {
 
           }
         },
-        -- pylsp = {
-        --   settings = {
-        --     pylsp = {
-        --       plugins = {
-        --         -- formatter options
-        --         black = { enabled = false },
-        --         autopep8 = { enabled = false },
-        --         yapf = { enabled = false },
-        --         pycodestyle = { enabled = false },
-        --         yapf = { enabled = false },
-        --         pylint = { enabled = true, executable = "pylint" },
-        --         pyflakes = { enabled = false },
-        --         -- type checker
-        --         pylsp_mypy = { enabled = true },
-        --       },
-        --     }
-        --   }
-        -- },
+        pylsp = {
+          settings = {
+            pylsp = {
+              plugins = {
+                -- formatter options
+                black = { enabled = false },
+                autopep8 = { enabled = false },
+                yapf = { enabled = false },
+                pycodestyle = { enabled = false },
+                yapf = { enabled = false },
+                pylint = { enabled = true, executable = "pylint" },
+                pyflakes = { enabled = false },
+                -- type checker
+                pylsp_mypy = { enabled = true },
+              },
+            }
+          }
+        },
         pyright = {
           settings = {
             pyright = {
@@ -59,9 +59,26 @@ return {
           },
         },
       },
-      setup = {},
-      format = {
-        timeout_ms = 3000,
+      setup = {
+        pyright = function(server, opts)
+          local util = require("lspconfig.util")
+          local root_dir = util.root_pattern("pyproject.toml", "setup.py", ".git")(vim.loop.cwd())
+          if root_dir and root_dir:match("checkmk") then
+            return true -- skip pyright if mypy config found
+          end
+          require("lspconfig")[server].setup(opts)
+          return true
+        end,
+
+        pylsp = function(server, opts)
+          local util = require("lspconfig.util")
+          local root_dir = util.root_pattern("pyproject.toml", "setup.py", ".git")(vim.loop.cwd())
+          if root_dir and root_dir:match("checkmk") then
+            require("lspconfig")[server].setup(opts)
+            return true
+          end
+          return true -- skip pylsp otherwise
+        end,
       },
     },
     config = function(plugin, opts)
@@ -70,13 +87,13 @@ return {
   },
   {
     "williamboman/mason.nvim",
+    version = "^1.0.0",
     dependencies = { "jay-babu/mason-nvim-dap.nvim" },
     build = ":MasonUpdate",
     cmd = "Mason",
     keys = { { "<leader>lm", "<cmd>Mason<cr>", desc = "Mason" } },
     opts = {
       ensure_installed = {
-        "shfmt",
       },
       PATH = "append",
     },
@@ -111,21 +128,7 @@ return {
   --   end,
   -- },
   {
-    "jose-elias-alvarez/null-ls.nvim",
-    event = "BufReadPre",
-    dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-dap" },
-    opts = function()
-      local nls = require("null-ls")
-      return {
-        root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git"),
-        sources = {
-          nls.builtins.formatting.shfmt,
-        },
-      }
-    end,
-  },
-  {
-    "jay-babu/mason-null-ls.nvim",
+    "nvimtools/none-ls.nvim",
     opts = { ensure_installed = nil, automatic_installation = true, automatic_setup = false },
   },
   {
