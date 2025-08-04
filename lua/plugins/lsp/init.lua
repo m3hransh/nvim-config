@@ -37,7 +37,7 @@ return {
                 pylint = { enabled = true, executable = "pylint" },
                 pyflakes = { enabled = false },
                 -- type checker
-                pylsp_mypy = { enabled = true },
+                pylsp_mypy = { enabled = true, report_progress = true, live_mode = false },
               },
             }
           }
