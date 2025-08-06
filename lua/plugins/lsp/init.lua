@@ -197,7 +197,7 @@ return {
         function()
           require("haskell-tools").hoogle.hoogle_signature()
         end,
-        desc = "Toggle Haskell Tools",
+        desc = "Toggle hoogle",
       },
     },
   },
