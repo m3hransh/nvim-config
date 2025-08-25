@@ -1,3 +1,4 @@
+-- Helper to disable specific capabilities per client
 return {
   {
     "neovim/nvim-lspconfig",
@@ -34,8 +35,11 @@ return {
                 yapf = { enabled = false },
                 pycodestyle = { enabled = false },
                 yapf = { enabled = false },
-                pylint = { enabled = true, executable = "pylint" },
+                pylint = { enabled = false },
                 pyflakes = { enabled = false },
+                jedi = {
+                  enabled = false,
+                },
                 -- type checker
                 pylsp_mypy = { enabled = true, report_progress = true, live_mode = false },
               },
@@ -60,19 +64,10 @@ return {
         },
       },
       setup = {
-        pyright = function(server, opts)
-          local util = require("lspconfig.util")
-          local root_dir = util.root_pattern("pyproject.toml", "setup.py", ".git")(vim.loop.cwd())
-          if root_dir and root_dir:match("checkmk") then
-            return true -- skip pyright if mypy config found
-          end
-          require("lspconfig")[server].setup(opts)
-          return true
-        end,
-
         pylsp = function(server, opts)
           local util = require("lspconfig.util")
           local root_dir = util.root_pattern("pyproject.toml", "setup.py", ".git")(vim.loop.cwd())
+
           if root_dir and root_dir:match("checkmk") then
             require("lspconfig")[server].setup(opts)
             return true

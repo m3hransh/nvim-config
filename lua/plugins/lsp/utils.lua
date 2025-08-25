@@ -88,4 +88,18 @@ function M.opts(name)
   return Plugin.values(plugin, "opts", false)
 end
 
+function M.on_attach_customize(client, bufnr)
+  local util = require("lspconfig.util")
+  local root_dir = util.root_pattern("pyproject.toml", "setup.py", ".git")(vim.loop.cwd())
+  if root_dir and root_dir:match("checkmk") then
+    if client.name == "pylsp" then
+      -- disable go-to-definition
+      client.server_capabilities.definitionProvider = false
+    elseif client.name == "pyright" then
+      -- disable diagnostics
+      client.handlers["textDocument/publishDiagnostics"] = function(...) end
+    end
+  end
+end
+
 return M
