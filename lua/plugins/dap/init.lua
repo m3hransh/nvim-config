@@ -14,6 +14,7 @@ return {
       { "rcarriga/nvim-dap-ui" },
       { "theHamsta/nvim-dap-virtual-text" },
       { "nvim-neotest/nvim-nio" },
+      { "mfussenegger/nvim-dap-python" }, -- for Python
     },
     -- stylua: ignore
     keys = {
@@ -111,6 +112,11 @@ return {
         dapui.close()
       end
 
+      -- Python adapter (debugpy must be installed in your venv)
+      require("dap-python").setup()
+
+      -- Optional: settings for test debugging
+      require("dap-python").test_runner = "pytest"
       -- TODO: DAP for Elixir didn't work
 
       -- set up debugger
