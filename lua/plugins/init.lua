@@ -16,7 +16,7 @@ return {
     event = "VeryLazy",
     enabled = true,
     opts = {
-      background_colour = "NotifyBackground",
+      background_colour = "#000000",
       fps = 30,
       icons = {
         DEBUG = "",

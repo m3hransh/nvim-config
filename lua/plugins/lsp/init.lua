@@ -247,10 +247,10 @@ return {
       -- See Configuration section for rest
     },
     -- See Commands section for default commands if you want to lazy load on them
-    keys = {
-      { "<leader>cc", "<cmd>CopilotChatExplain<cr>", desc = "Explain Selected Code" },
-      { "<leader>co", "<cmd>CopilotChatToggle<cr>",  desc = "Toggle Copilot Chat" },
-    },
+    -- keys = {
+    --   { "<leader>cc", "<cmd>CopilotChatExplain<cr>", desc = "Explain Selected Code" },
+    --   { "<leader>co", "<cmd>CopilotChatToggle<cr>",  desc = "Toggle Copilot Chat" },
+    -- },
   },
   {
     "folke/lazydev.nvim",

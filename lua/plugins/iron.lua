@@ -44,14 +44,14 @@ return {
         cr = "<space>s<cr>",
         interrupt = "<space>s<space>",
         exit = "<space>sq",
-        clear = "<space>cl",
+        clear = "<space>rc",
       },
       -- If the highlight is on, you can change how it looks
       -- For the available options, check nvim_set_hl
       highlight = {
         italic = true
       },
-      ignore_blank_lines = true,   -- ignore blank lines when sending visual select lines
+      ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
     }
 
     -- iron also has a list of commands, see :h iron-commands for all available commands
