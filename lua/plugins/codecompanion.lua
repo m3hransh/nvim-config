@@ -82,6 +82,21 @@ return {
         },
       },
       inline = {
+        keymaps = {
+          accept_change = {
+            modes = {
+              n = "<C-CR>",
+            },
+            desc = "Accept the current change",
+          },
+          reject_change = {
+            modes = {
+              n = "<C-r>",
+            },
+            options = { nowait = true },
+            desc = "Reject the current change",
+          },
+        },
         adapter = {
           name = "copilot",
           model = "gpt-4.1",

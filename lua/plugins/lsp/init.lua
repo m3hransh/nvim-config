@@ -112,30 +112,9 @@ return {
       require("mason-nvim-dap").setup(opts)
     end,
   },
-  --
-  -- {
-  --   "jay-babu/mason-nvim-dap.nvim",
-  --   event = "BufReadPre",
-  --   opts = { ensure_installed = { "python", "delve", "elixir" } },
-  --   dependencies = { "mason.nvim" },
-  --   config = function(_, opts)
-  --     require("mason-nvim-dap").setup(opts)
-  --   end,
-  -- },
   {
     "nvimtools/none-ls.nvim",
     opts = { ensure_installed = nil, automatic_installation = true, automatic_setup = false },
-  },
-  {
-    "utilyre/barbecue.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      "SmiteshP/nvim-navic",
-      "nvim-tree/nvim-web-devicons",
-    },
-    enabled = false, -- use lspsaga
-    config = true,
   },
   {
     "folke/trouble.nvim",
@@ -157,13 +136,6 @@ return {
         enable = false,
       },
     },
-  },
-  {
-    "Bekaboo/dropbar.nvim",
-    event = "VeryLazy",
-    enabled = function()
-      return vim.fn.has("nvim-0.10.0") == 1
-    end,
   },
   {
     "pmizio/typescript-tools.nvim",
@@ -236,23 +208,6 @@ return {
   -- 	},
   -- },
   {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "main",
-    dependencies = {
-      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
-      { "nvim-lua/plenary.nvim" },  -- for curl, log wrapper
-    },
-    opts = {
-      debug = true, -- Enable debugging
-      -- See Configuration section for rest
-    },
-    -- See Commands section for default commands if you want to lazy load on them
-    -- keys = {
-    --   { "<leader>cc", "<cmd>CopilotChatExplain<cr>", desc = "Explain Selected Code" },
-    --   { "<leader>co", "<cmd>CopilotChatToggle<cr>",  desc = "Toggle Copilot Chat" },
-    -- },
-  },
-  {
     "folke/lazydev.nvim",
     ft = "lua", -- only load on lua files
     opts = {
@@ -260,6 +215,23 @@ return {
         -- See the configuration section for more details
         -- Load luvit types when the `vim.uv` word is found
         { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+  { -- optional blink completion source for require statements and module annotations
+    "saghen/blink.cmp",
+    opts = {
+      sources = {
+        -- add lazydev to your completion providers
+        default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+        providers = {
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            -- make lazydev completions top priority (see `:h blink.cmp`)
+            score_offset = 100,
+          },
+        },
       },
     },
   },
