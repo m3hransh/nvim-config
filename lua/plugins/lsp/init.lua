@@ -9,6 +9,14 @@ return {
       { "williamboman/mason.nvim",           version = "^1.0.0" },
       { "williamboman/mason-lspconfig.nvim", version = "^1.0.0" },
       { "jay-babu/mason-null-ls.nvim",       version = "^1.0.0" },
+      {
+        "SmiteshP/nvim-navbuddy",
+        dependencies = {
+          "SmiteshP/nvim-navic",
+          "MunifTanjim/nui.nvim"
+        },
+        opts = { lsp = { auto_attach = true } }
+      }
     },
     opts = {
       servers = {
@@ -244,5 +252,5 @@ return {
       -- VimTeX configuration goes here, e.g.
       vim.g.vimtex_view_method = "zathura"
     end
-  }
+  },
 }
