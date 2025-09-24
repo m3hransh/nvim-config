@@ -130,6 +130,8 @@ return {
 
         -- Virt Column
         VirtColumn = { fg = "${indentline}" },
+        Normal = { bg = "none" },
+        NormalNC = { bg = "none" },
       },
 
       caching = false,
@@ -158,7 +160,7 @@ return {
       },
       options = {
         cursorline = true,
-        -- transparency = true,
+        transparency = true,
         -- highlight_inactive_windows = true,
       },
     },
