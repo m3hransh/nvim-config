@@ -1,12 +1,12 @@
 local ht = require("haskell-tools")
 
 local keymap = vim.keymap.set
+local bufnr = vim.api.nvim_get_current_buf()
 local opts = { noremap = true, silent = true, buffer = bufnr }
 
 local function conf(new_opts)
   return vim.tbl_extend("force", opts, new_opts)
 end
-local bufnr = vim.api.nvim_get_current_buf()
 -- haskell-language-server relies heavily on codeLenses,
 -- so auto-refresh (see advanced configuration) is enabled by default
 keymap("n", "<space>lhc", vim.lsp.codelens.run, conf({ desc = "Auto Refresh" }))

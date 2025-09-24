@@ -40,7 +40,6 @@ return {
                 -- formatter options
                 black = { enabled = false },
                 autopep8 = { enabled = false },
-                yapf = { enabled = false },
                 pycodestyle = { enabled = false },
                 yapf = { enabled = false },
                 pylint = { enabled = false },
@@ -116,7 +115,6 @@ return {
       else
         ensure_installed()
       end
-      local opts = { ensure_installed = { "python", "delve", "elixir" } }
       require("mason-nvim-dap").setup(opts)
     end,
   },
@@ -129,8 +127,31 @@ return {
     cmd = { "TroubleToggle", "Trouble" },
     opts = { use_diagnostic_signs = true },
     keys = {
-      { "<leader>ld", "<cmd>TroubleToggle document_diagnostics<cr>",  desc = "Document Diagnostics" },
-      { "<leader>lD", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics" },
+      {
+        "<leader>lD",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>ld",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
+      {
+        "<leader>lL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>lQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
     },
   },
   {
@@ -229,6 +250,11 @@ return {
   { -- optional blink completion source for require statements and module annotations
     "saghen/blink.cmp",
     opts = {
+      ---@module "blink.cmp"
+      ---@type blink.cmp.Config
+      fuzzy = {
+        implementation = "lua",
+      },
       sources = {
         -- add lazydev to your completion providers
         default = { "lazydev", "lsp", "path", "snippets", "buffer" },
@@ -246,11 +272,23 @@ return {
   { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
   {
     "lervag/vimtex",
-    lazy = false, -- we don't want to lazy load VimTeX
-    -- tag = "v2.15", -- uncomment to pin to a specific release
+    lazy = false,
     init = function()
-      -- VimTeX configuration goes here, e.g.
       vim.g.vimtex_view_method = "zathura"
-    end
-  },
+      vim.g.vimtex_indent_enabled = 0
+    end,
+    config = function()
+      -- runs after plugin loads; also add the hard-off autocmd
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "tex", "plaintex", "latex" },
+        callback = function()
+          vim.b.did_indent = 1
+          vim.bo.indentexpr = ""
+          vim.bo.autoindent = false
+          vim.bo.smartindent = false
+          vim.bo.cindent = false
+        end,
+      })
+    end,
+  }
 }
