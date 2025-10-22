@@ -5,10 +5,8 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       "antoinemadec/FixCursorHold.nvim",
-      "nvim-neotest/neotest-vim-test",
       "nvim-neotest/neotest-plenary",
       "nvim-neotest/neotest-python",
-      "vim-test/vim-test",
       "stevearc/overseer.nvim",
     },
     keys = {
@@ -29,9 +27,6 @@ return {
       return {
         adapters = {
           require "neotest-plenary",
-          require "neotest-vim-test" {
-            ignore_file_types = { "python", "vim", "lua" },
-          },
           require("neotest-python")({
             -- Extra arguments for nvim-dap configuration
             -- See https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for values
