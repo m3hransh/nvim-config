@@ -74,3 +74,30 @@ keymap("n", "<leader><leader>", "<c-^>", opts)
 vim.keymap.set('n', '<leader>u', function()
   require('overseer').run_template({ name = 'f12' })
 end, { desc = 'F12 to a site' })
+
+vim.keymap.set('n', '<C-+>', function()
+  local font = vim.o.guifont
+  local name, size = font:match("(.+):h(%d+)")
+  size = tonumber(size) + 1
+  vim.o.guifont = string.format("%s:h%d", name, size)
+end)
+
+-- Decrease font size
+vim.keymap.set('n', '<C-->', function()
+  local font = vim.o.guifont
+  local name, size = font:match("(.+):h(%d+)")
+  size = tonumber(size) - 1
+  vim.o.guifont = string.format("%s:h%d", name, size)
+end)
+
+function _G.ReloadConfig()
+  for name, _ in pairs(package.loaded) do
+    if name:match('^config') or name:match('^plugins') then
+      package.loaded[name] = nil
+    end
+  end
+  dofile(vim.env.MYVIMRC)
+  print("✅ Config reloaded")
+end
+
+vim.keymap.set('n', '<leader>R', ReloadConfig, { desc = 'Reload config' })

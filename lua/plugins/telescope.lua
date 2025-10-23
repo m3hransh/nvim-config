@@ -8,11 +8,7 @@ return {
       "vim.tbl_deep_extend('force', require('telescope.themes').get_dropdown()," ..
       "{find_command = {'rg', '--files', '--hidden', '-g', '!.git', '-g', '!~/bazel-*' }, filename_first = true, path_display = { 'truncate' } } ))<CR>",
       desc = "Find Files",
-    }, {
-    "<leader>R",
-    "<cmd>Telescope oldfiles<cr>",
-    desc = "Recent",
-  },
+    },
     {
       "<leader>b",
       "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown())<cr>",
