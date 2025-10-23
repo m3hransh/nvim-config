@@ -62,6 +62,12 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 -- vim.g.neovide_cursor_vfx_mode = "railgun"
+vim.g.neovide_theme = 'dark'
+vim.g.neovide_opacity = 0.8
+vim.g.neovide_background_color = "#16161e"
+vim.g.neovide_floating_blur_amount_x = 2.0
+vim.g.neovide_floating_blur_amount_y = 2.0
+
 -- auto close nvim tree
 -- vim.api.nvim_create_autocmd("BufEnter", {
 --   nested = true,
