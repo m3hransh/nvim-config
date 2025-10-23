@@ -6,7 +6,6 @@ local options = {
   backup = false,                   -- creates a backup file
   clipboard = "unnamedplus",        -- allows neovim to access the system clipboard
   completeopt = "menuone,noselect", -- mostly just for cmp
-  conceallevel = 0,                 -- so that `` is visible in markdown files
   fileencoding = "utf-8",           -- the encoding written to a file
   hlsearch = true,                  -- highlight all matches on previous search pattern
   ignorecase = true,                -- ignore case in search patterns
@@ -61,25 +60,6 @@ vim.g.skip_ts_context_commentstring_module = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
--- vim.g.neovide_cursor_vfx_mode = "railgun"
-vim.g.neovide_theme = 'dark'
-vim.g.neovide_opacity = 0.8
-vim.g.neovide_background_color = "#16161e"
-vim.g.neovide_floating_blur_amount_x = 2.0
-vim.g.neovide_floating_blur_amount_y = 2.0
-
--- auto close nvim tree
--- vim.api.nvim_create_autocmd("BufEnter", {
---   nested = true,
---   callback = function()
---     if
---       #vim.api.nvim_list_wins() == 1
---       and vim.api.nvim_buf_get_name(0):match "NvimTree_" ~= nil
---     then
---       vim.cmd "quit"
---     end
---   end,
--- })
 
 vim.cmd([[ command! Exec execute 'set splitright | vnew | set filetype=sh | read !sh #' ]])
 vim.cmd("set whichwrap+=<,>,[,],h,l")
@@ -94,3 +74,10 @@ vim.api.nvim_set_hl(0, 'MyWinBar', { fg = '#ffffff', bg = '#1a1b26', bold = true
 vim.api.nvim_set_hl(0, 'MyWinBarNC', { fg = '#666666', bg = '#1a1b26' })
 
 vim.o.winbar = "%{%v:lua.require('config.utils').set_winbar()%}"
+
+-- Neovide settings
+vim.g.neovide_cursor_vfx_mode = "ripple"
+vim.g.neovide_theme = 'dark'
+vim.g.neovide_opacity = 0.90
+vim.g.neovide_floating_blur_amount_x = 3.0
+vim.g.neovide_floating_blur_amount_y = 3.0
