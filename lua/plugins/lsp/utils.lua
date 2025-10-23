@@ -97,7 +97,16 @@ function M.on_attach_customize(client, bufnr)
       client.server_capabilities.definitionProvider = false
     elseif client.name == "pyright" then
       -- disable diagnostics
-      client.handlers["textDocument/publishDiagnostics"] = function(...) end
+      local original_handler = vim.lsp.handlers["textDocument/publishDiagnostics"]
+      -- client.handlers["textDocument/publishDiagnostics"] = function(...) end
+      vim.lsp.handlers["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
+        -- only drop diagnostics from this Pyright client
+        if ctx.client_id == client.id then
+          return
+        end
+        -- otherwise pass through
+        original_handler(err, result, ctx, config)
+      end
     end
   end
 end

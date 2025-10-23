@@ -7,7 +7,11 @@ return {
       "antoinemadec/FixCursorHold.nvim",
       "nvim-neotest/neotest-plenary",
       "nvim-neotest/neotest-python",
-      "stevearc/overseer.nvim",
+      {
+        "stevearc/overseer.nvim",
+
+        tag = "v1.6.0"
+      },
     },
     keys = {
       { "<leader>td", "<cmd>w|lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})<cr>", desc = "Debug File" },
@@ -79,6 +83,7 @@ return {
   },
   {
     "stevearc/overseer.nvim",
+    tag = "v1.6.0",
     event = { "BufReadPre", "BufNewFile" },
     keys = {
       { "<leader>oR", "<cmd>OverseerRunCmd<cr>",       desc = "Run Command" },
