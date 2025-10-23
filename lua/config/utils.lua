@@ -60,18 +60,46 @@ function M.set_winbar()
   end
 
   local filename = vim.fn.fnamemodify(name, ':t')
+  local relativepath = vim.fn.fnamemodify(name, ':~:.')
   local ft = vim.bo[b].filetype
   local icon = ''
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if ok then icon = select(1, devicons.get_icon(filename, ft, { default = true })) or '' end
 
-  local readonly = vim.bo[b].readonly and '[RO]' or ''
-  local unsaved  = (vim.bo[b].modified and name ~= '') and '●' or ''
+  local readonly     = vim.bo[b].readonly and '[RO]' or ''
+  local unsaved      = (vim.bo[b].modified and name ~= '') and '●' or ''
+  local dirty        = git_info()
+  local git          = dirty and ' *' or ''
 
-  local dirty    = git_info()
-  local git      = dirty and ' *' or ''
+  -- Truncate relativepath if too long
+  local max_path_len = 40
+  if #relativepath > max_path_len then
+    relativepath = '...' .. string.sub(relativepath, -max_path_len)
+  end
+  -- Get highlight group from theme (use 'Directory' or 'Comment' as example)
+  local filepath_hl = '%#Directory#'
 
-  return table.concat({ ' ', unsaved, icon, ' ' .. filename, readonly, git }, ' ')
+  -- Truncate relativepath if too long
+  local max_path_len = 60
+  if #relativepath > max_path_len then
+    relativepath = '...' .. string.sub(relativepath, -max_path_len)
+  end
+
+  -- Change color to Comment if buffer is not active
+  local current_win = vim.api.nvim_get_current_win()
+  local current_buf = vim.api.nvim_win_get_buf(current_win)
+  if b ~= current_buf then
+    filepath_hl = '%#Comment#'
+  end
+
+  -- Apply highlight to filepath
+  relativepath   = filepath_hl .. relativepath .. '%*'
+
+  -- left: relative path, right: filename
+  local left     = relativepath
+  local right_hl = (b ~= current_buf) and '%#Comment#' or '%#Title#' -- Use Comment if not focused
+  local right    = right_hl .. table.concat({ unsaved, icon, ' ' .. filename, readonly, git }, ' ') .. '%*'
+  return left .. '%=' .. right
 end
 
 function M.update_all_winbars()
