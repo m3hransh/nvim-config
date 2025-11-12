@@ -65,6 +65,22 @@ return {
                   reportTypedDictNotRequiredAccess = "none",
                   reportPossiblyUnboundVariable = "warning"
                 },
+                -- Avoid Bazel cache and external directories
+                exclude = {
+                  "**/bazel-*/**",
+                  "**/.bazel/**",
+                  "**/bazel-bin/**",
+                  "**/bazel-out/**",
+                  "**/bazel-testlogs/**",
+                  "**/node_modules/**",
+                  "**/.venv/**",
+                  "**/__pycache__/**",
+                },
+                -- Prefer local code over external/cached modules
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = false,
+                -- Stay within the project
+                stubPath = "",
               },
             },
           },
