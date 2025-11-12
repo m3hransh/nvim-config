@@ -126,9 +126,16 @@ return {
           },
           adapter = {
             name = "copilot",
-            model = "gpt-4.1",
+            model = "claude-sonnet-4",
           },
         },
+        agent = {
+          adapter = {
+            name = "copilot",
+            model = "claude-sonnet-4",
+          },
+        },
+
       }, ---@module "vectorcode"
       extensions = {
         vectorcode = {
