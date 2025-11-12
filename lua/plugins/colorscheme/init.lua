@@ -166,12 +166,19 @@ return {
     },
     init = function()
       vim.cmd("set background=dark")
-      vim.cmd([[
-        colorscheme vaporwave
-        highlight Normal guibg=#1e1e2e guifg=#cdd6f4
-        highlight NormalFloat guibg=#1e1e2e
-      ]])
-
+      if vim.g.neovide then
+        vim.cmd([[
+          colorscheme vaporwave
+          highlight Normal guibg=#1e1e2e guifg=#cdd6f4
+          highlight NormalFloat guibg=#1e1e2e
+        ]])
+      else
+        vim.cmd([[
+          colorscheme vaporwave
+          highlight Normal guibg=NONE guifg=#cdd6f4
+          highlight NormalFloat guibg=NONE
+        ]])
+      end
       -- local utils = require("heirline.utils")
       -- utils.on_colorscheme(require("onedarkpro.helpers").get_colors())
     end,

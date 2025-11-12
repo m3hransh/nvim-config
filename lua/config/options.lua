@@ -76,7 +76,7 @@ vim.api.nvim_set_hl(0, 'MyWinBarNC', { fg = '#666666', bg = '#1a1b26' })
 vim.o.winbar = "%{%v:lua.require('config.utils').set_winbar()%}"
 
 -- Neovide settings
-vim.g.neovide_cursor_vfx_mode = "ripple"
+vim.g.neovide_cursor_vfx_mode = { "pixiedust", "pixiedust" }
 vim.g.neovide_theme = 'dark'
 vim.g.neovide_opacity = 0.90
 vim.g.neovide_floating_blur_amount_x = 3.0
