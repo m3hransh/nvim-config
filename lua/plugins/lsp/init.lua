@@ -29,9 +29,12 @@ return {
               logFile = "~/ruff.log",
               logLevel = "debug",
               organizeImports = true,
+              fixAll = true,
             }
-
-          }
+          },
+          on_attach = function(client, bufnr)
+            client.server_capabilities.hoverProvider = false
+          end,
         },
         pylsp = {
           settings = {
@@ -134,10 +137,7 @@ return {
       require("mason-nvim-dap").setup(opts)
     end,
   },
-  {
-    "nvimtools/none-ls.nvim",
-    opts = { ensure_installed = nil, automatic_installation = true, automatic_setup = false },
-  },
+
   {
     "folke/trouble.nvim",
     cmd = { "TroubleToggle", "Trouble" },
