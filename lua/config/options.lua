@@ -81,3 +81,5 @@ vim.g.neovide_theme = 'dark'
 vim.g.neovide_opacity = 0.90
 vim.g.neovide_floating_blur_amount_x = 3.0
 vim.g.neovide_floating_blur_amount_y = 3.0
+vim.g.neovide_cursor_smooth_blink = true
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250"
