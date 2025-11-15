@@ -7,6 +7,7 @@ return {
       "antoinemadec/FixCursorHold.nvim",
       "nvim-neotest/neotest-plenary",
       "nvim-neotest/neotest-python",
+      "mrcjkb/neotest-haskell",
       {
         "stevearc/overseer.nvim",
 
@@ -31,6 +32,7 @@ return {
       return {
         adapters = {
           require "neotest-plenary",
+          require "neotest-haskell",
           require("neotest-python")({
             -- Extra arguments for nvim-dap configuration
             -- See https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for values
