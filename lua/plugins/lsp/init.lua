@@ -20,10 +20,21 @@ return {
     },
     opts = {
       servers = {
-        dockerls = {},
-        lua_ls = {},
-        gleam = {},
+        dockerls = {
+          filetypes = { 'dockerfile' },
+          root_markers = { '.git' },
+        },
+        lua_ls = {
+          filetypes = { 'lua' },
+          root_markers = { '.luarc.json', '.luarc.jsonc', '.git' },
+        },
+        gleam = {
+          filetypes = { 'gleam' },
+          root_markers = { 'gleam.toml', '.git' },
+        },
         ruff = {
+          filetypes = { 'python' },
+          root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' },
           init_options = {
             settings = {
               logFile = "~/ruff.log",
@@ -37,6 +48,8 @@ return {
           end,
         },
         pylsp = {
+          filetypes = { 'python' },
+          root_markers = { 'pyproject.toml', 'setup.py', '.git' },
           settings = {
             pylsp = {
               plugins = {
@@ -57,6 +70,8 @@ return {
           }
         },
         pyright = {
+          filetypes = { 'python' },
+          root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' },
           settings = {
             pyright = {
               --       -- Using Ruff's import organizer
@@ -91,14 +106,28 @@ return {
       },
       setup = {
         pylsp = function(server, opts)
-          local util = require("lspconfig.util")
-          local root_dir = util.root_pattern("pyproject.toml", "setup.py", ".git")(vim.loop.cwd())
-
-          if root_dir and root_dir:match("checkmk") then
-            require("lspconfig")[server].setup(opts)
-            return true
+          -- Use root_dir function to conditionally enable pylsp
+          opts.root_dir = function(bufnr, on_dir)
+            local function find_root(markers)
+              local path = vim.api.nvim_buf_get_name(bufnr)
+              local dir = vim.fs.dirname(path)
+              local found = vim.fs.find(markers, { path = dir, upward = true })[1]
+              return found and vim.fs.dirname(found) or nil
+            end
+            
+            local root_dir = find_root({ "pyproject.toml", "setup.py", ".git" })
+            
+            -- Only enable pylsp in checkmk projects
+            if root_dir and root_dir:match("checkmk") then
+              on_dir(root_dir)
+            else
+              on_dir(nil) -- Skip pylsp for non-checkmk projects
+            end
           end
-          return true -- skip pylsp otherwise
+          
+          vim.lsp.config[server] = opts
+          vim.lsp.enable(server)
+          return true
         end,
       },
     },

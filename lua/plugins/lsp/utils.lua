@@ -89,8 +89,16 @@ function M.opts(name)
 end
 
 function M.on_attach_customize(client, bufnr)
-  local util = require("lspconfig.util")
-  local root_dir = util.root_pattern("pyproject.toml", "setup.py", ".git")(vim.loop.cwd())
+  -- Check if we're in a checkmk project by searching upward for markers
+  local function find_root(markers)
+    local path = vim.api.nvim_buf_get_name(bufnr)
+    local dir = vim.fs.dirname(path)
+    return vim.fs.find(markers, { path = dir, upward = true })[1]
+  end
+  
+  local root_file = find_root({ "pyproject.toml", "setup.py", ".git" })
+  local root_dir = root_file and vim.fs.dirname(root_file) or nil
+  
   if root_dir and root_dir:match("checkmk") then
     if client.name == "pylsp" then
       -- disable go-to-definition

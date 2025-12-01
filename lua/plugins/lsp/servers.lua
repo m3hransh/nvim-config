@@ -64,11 +64,13 @@ function M.setup(_, opts)
   local servers = opts.servers
   local capabilities = lsp_utils.capabilities()
 
+  -- Set global LSP config for all servers
+  vim.lsp.config['*'] = {
+    capabilities = capabilities,
+  }
 
   local function setup(server)
-    local server_opts = vim.tbl_deep_extend("force", {
-      capabilities = capabilities,
-    }, servers[server] or {})
+    local server_opts = servers[server] or {}
 
     if opts.setup[server] then
       if opts.setup[server](server, server_opts) then
@@ -80,10 +82,11 @@ function M.setup(_, opts)
       end
     end
     if server == "angularls" then
-      server_opts.root_dir = require("lspconfig.util").root_pattern("package.json", "project.json")
+      server_opts.root_markers = { "package.json", "project.json" }
     end
 
-    require("lspconfig")[server].setup(server_opts)
+    vim.lsp.config[server] = server_opts
+    vim.lsp.enable(server)
   end
 
   -- Add bun for Node.js-based servers
