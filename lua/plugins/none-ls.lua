@@ -6,6 +6,7 @@ return {
     local null_ls = require("null-ls")
     -- Custom source to run ruff with --fix for organize imports
     local ruff_organize = {
+      name="ruff_organize",
       method = null_ls.methods.FORMATTING,
       filetypes = { "python" },
       generator = null_ls.formatter({
