@@ -28,7 +28,9 @@
           buildInputs = [ 
             rustToolchain
             pkgs.openssl 
+            pkgs.stack
             pkgs.pkg-config 
+            pkgs.yarn
           ];
 
           shellHook = ''
