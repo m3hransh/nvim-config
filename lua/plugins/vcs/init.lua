@@ -26,7 +26,6 @@ return {
     "lewis6991/gitsigns.nvim",
     event = "BufReadPre",
     config = function()
-      icons = require('config.icons')
       require('gitsigns').setup {
 
         -- update_debounce = 100,
@@ -43,7 +42,7 @@ return {
               return "]c"
             end
             vim.schedule(function()
-              gs.next_hunk()
+              gs.nav_hunk{ direction = "next" }
             end)
             return "<Ignore>"
           end, { expr = true })
@@ -53,7 +52,7 @@ return {
               return "[c"
             end
             vim.schedule(function()
-              gs.prev_hunk()
+              gs.nav_hunk{ direction = "prev" }
             end)
             return "<Ignore>"
           end, { expr = true })
