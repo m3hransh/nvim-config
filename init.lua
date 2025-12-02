@@ -1,4 +1,5 @@
 require "config.options"
+require "config.lsp"
 require "config.lazy"
 
 vim.api.nvim_create_autocmd("User", {

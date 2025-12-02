@@ -4,7 +4,6 @@ return {
   dependencies = { "nvim-lua/plenary.nvim" },
   config = function()
     local null_ls = require("null-ls")
-    
     -- Custom source to run ruff with --fix for organize imports
     local ruff_organize = {
       method = null_ls.methods.FORMATTING,
@@ -15,11 +14,9 @@ return {
         to_stdin = true,
       }),
     }
-    
     null_ls.setup({
       sources = {
         ruff_organize,
-        null_ls.builtins.formatting.ruff_format,
       },
     })
   end,

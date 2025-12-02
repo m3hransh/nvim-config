@@ -59,7 +59,7 @@ return {
       end
 
       -- add formatter
-      local lsp_utils = require "plugins.lsp.utils"
+      local lsp_utils = require "plugins.statusline.utils"
       local formatters = lsp_utils.list_formatters(buf_ft)
       vim.list_extend(buf_client_names, formatters)
 
