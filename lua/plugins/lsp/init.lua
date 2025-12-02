@@ -335,5 +335,39 @@ return {
         end,
       })
     end,
+  },
+  {
+    'isovector/cornelis',
+    name = 'cornelis',
+    ft = 'agda',
+    build = 'stack install',
+    dependencies = { 'neovimhaskell/nvim-hs.vim', 'kana/vim-textobj-user' },
+    version = '*',
+  },
+  {
+    "grddavies/tidal.nvim",
+    opts = {
+      -- Your configuration here
+      -- See configuration section for defaults
+      boot = {
+        tidal = {
+          --- Command to launch ghci with tidal installation
+          cmd = "tidal",
+          -- args = {
+          --   "-v0",
+          -- },
+          --- Tidal boot file path
+          file = nil,
+          enabled = true,
+        },
+      }
+    },
+    -- Recommended: Install TreeSitter parsers for Haskell and SuperCollider
+    --
+    event = "BufEnter  *.tidal",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      opts = { ensure_installed = { "haskell", "supercollider" } },
+    },
   }
 }
