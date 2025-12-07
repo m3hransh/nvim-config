@@ -27,6 +27,7 @@ return {
           "html-lsp",                  -- HTML LSP
           "css-lsp",                   -- CSS LSP
           "vue-language-server",       -- Vue LSP
+          "json-lsp",                  -- JSON LSP (vscode-json-languageserver)
 
           -- Formatters (for conform.nvim and general use)
           "stylua",
