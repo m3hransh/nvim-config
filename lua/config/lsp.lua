@@ -8,6 +8,7 @@ local servers = {
   "html-ls",       -- HTML language server
   "css-ls",        -- CSS language server
   "vue-ls",        -- Vue language server
+  "nil",
 }
 
 local function get_capabilities()
