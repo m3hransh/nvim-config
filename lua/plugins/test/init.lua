@@ -8,7 +8,15 @@ return {
       "nvim-neotest/neotest-plenary",
       "nvim-neotest/neotest-python",
       "mrcjkb/neotest-haskell",
-      "nvim-neotest/neotest-go",
+      {
+        "m3hransh/neotest-golang",
+        dependencies = {
+          "leoluz/nvim-dap-go",
+        },
+        build = function()
+          vim.system({ "go", "install", "gotest.tools/gotestsum@latest" }):wait() -- Optional, but recommended
+        end,
+      },
       {
         "stevearc/overseer.nvim",
 
@@ -34,7 +42,10 @@ return {
         adapters = {
           require "neotest-plenary",
           require "neotest-haskell",
-          require "neotest-go",
+          require("neotest-golang")({
+            runner = "gotestsum",
+            testify_enabled = true, -- Enable testify support
+          }),
           require("neotest-python")({
             -- Extra arguments for nvim-dap configuration
             -- See https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for values

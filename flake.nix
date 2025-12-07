@@ -31,6 +31,8 @@
             pkgs.stack
             pkgs.pkg-config 
             pkgs.yarn
+            pkgs.go-task
+            pkgs.delve
           ];
 
           shellHook = ''
