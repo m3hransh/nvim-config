@@ -12,4 +12,11 @@ return {
             },
         },
     },
+  on_attach = function(client, bufnr)
+    local ok_navbuddy, navbuddy = pcall(require, "nvim-navbuddy")
+
+    if ok_navbuddy then
+      navbuddy.attach(client, bufnr)
+    end
+  end,
 }

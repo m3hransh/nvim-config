@@ -1,8 +1,8 @@
+-- Explicitly configured servers
 local servers = {
   "gopls",
   "lua_ls",
   "pyright",
-  "pylsp",
   "rust-analyzer", -- Rust language server
   "tailwindcss",   -- Tailwind CSS language server
   "html-ls",       -- HTML language server
@@ -10,7 +10,12 @@ local servers = {
   "vue-ls",        -- Vue language server
   "nil",
   "jsonls",       -- JSON language server
+  "pylsp",
+  "starpls",
 }
+
+-- Import utilities for Mason integration
+local utils = require("config.utils")
 
 local function get_capabilities()
   -- Check if blink.cmp is available
@@ -47,7 +52,6 @@ local function setup_keymaps(bufnr, client)
   -- Basic LSP Mappings
   map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
   map("n", "gd", vim.lsp.buf.definition, { desc = "Goto Definition" })
-  map("n", "gr", vim.lsp.buf.references, { desc = "References" })
   map("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
   map("n", "gI", vim.lsp.buf.implementation, { desc = "Goto Implementation" })
   map("n", "gt", vim.lsp.buf.type_definition, { desc = "Goto Type Definition" })
@@ -68,7 +72,7 @@ local function setup_keymaps(bufnr, client)
   if pcall(require, "telescope") then
     local builtin = require("telescope.builtin")
     map("n", "gd", builtin.lsp_definitions, { desc = "Goto Definition" })
-    map("n", "gr", builtin.lsp_references, { desc = "References" })
+    map("n", "<leader>lR", builtin.lsp_references, { desc = "References" })
     map("n", "gI", builtin.lsp_implementations, { desc = "Goto Implementation" })
     map("n", "gt", builtin.lsp_type_definitions, { desc = "Goto Type Definition" })
     map("n", "<leader>ls", builtin.lsp_document_symbols, { desc = "Document Symbols" })
@@ -78,10 +82,19 @@ local function setup_keymaps(bufnr, client)
   if client.server_capabilities.documentSymbolProvider then
     map("n", "<leader>ln", "<cmd>Navbuddy<cr>", { desc = "Navbuddy" })
   end
-  -- IncRename
+  -- LSP Rename with better UI
   if client.server_capabilities.renameProvider then
-    map("n", "<leader>lr", function() return ":IncRename " .. vim.fn.expand("<cword>") end,
-      { expr = true, desc = "Rename" })
+    map("n", "<leader>lr", function()
+      local curr_name = vim.fn.expand("<cword>")
+      vim.ui.input({
+        prompt = "Rename: ",
+        default = curr_name,
+      }, function(new_name)
+        if new_name and new_name ~= "" and new_name ~= curr_name then
+          vim.lsp.buf.rename(new_name)
+        end
+      end)
+    end, { desc = "Rename" })
   end
 end
 
@@ -91,11 +104,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     local bufnr = ev.buf
     setup_keymaps(bufnr, client)
-    local ok_navbuddy, navbuddy = pcall(require, "nvim-navbuddy")
-
-    if ok_navbuddy then
-      navbuddy.attach(client, bufnr)
-    end
   end
 })
 
@@ -130,9 +138,12 @@ vim.diagnostic.config({
 
 local capabilities = get_capabilities()
 
-for _, server_name in ipairs(servers) do
-  -- Load server-specific config from lsp/<server-name>.lua
-  local config_path = vim.fn.stdpath("config") .. "/lsp/" .. server_name .. ".lua"
+-- Get all servers (explicit + Mason-installed)
+local all_servers = utils.get_all_servers(servers)
+
+for _, server_name in ipairs(all_servers) do
+    -- Load server-specific config from lsp/<server-name>.lua
+    local config_path = vim.fn.stdpath("config") .. "/lsp/" .. server_name .. ".lua"
 
   if vim.fn.filereadable(config_path) == 1 then
     -- Load the config file
@@ -322,6 +333,10 @@ vim.api.nvim_create_user_command("LspInfo", function()
     print(string.format("󰌘 Client %d: %s", i, client.name))
     print("  ID: " .. client.id)
     print("  Root dir: " .. (client.config.root_dir or "Not set"))
+    
+    if client.config.cmd and #client.config.cmd > 0 then
+      print("  Executable: " .. table.concat(client.config.cmd, " "))
+    end
 
     if client.workspace_folders and #client.workspace_folders > 0 then
       print("  Workspace folders:")
@@ -347,6 +362,11 @@ vim.api.nvim_create_user_command("LspInfo", function()
     end
     if #key_features > 0 then
       print("  Key features: " .. table.concat(key_features, ", "))
+    end
+
+    if client.config.settings then
+      print("  Settings:")
+      print("    " .. vim.inspect(client.config.settings))
     end
 
     print("")

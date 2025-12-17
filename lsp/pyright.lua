@@ -28,7 +28,12 @@ return {
       },
     },
   },
-  on_attach = function(client, _)
+  on_attach = function(client, bufnr)
+    local ok_navbuddy, navbuddy = pcall(require, "nvim-navbuddy")
+
+    if ok_navbuddy then
+      navbuddy.attach(client, bufnr)
+    end
 
     local root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' }
     local root_dir = vim.fs.dirname(vim.fs.find(root_markers, { path = vim.api.nvim_buf_get_name(0), upward = true })[1])

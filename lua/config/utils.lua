@@ -110,4 +110,77 @@ function M.update_all_winbars()
   end
 end
 
+-- Get all Mason-installed LSP servers
+function M.get_mason_lsp_servers()
+    local mason_registry_ok, mason_registry = pcall(require, "mason-registry")
+    if not mason_registry_ok then
+        return {}
+    end
+
+    local installed_servers = {}
+    local installed_packages = mason_registry.get_installed_packages()
+
+    for _, pkg in ipairs(installed_packages) do
+        -- Check if package is an LSP server
+        if pkg.spec.categories and vim.tbl_contains(pkg.spec.categories, "LSP") then
+            -- Convert Mason package name to lspconfig server name
+            local server_name = pkg.name
+            
+            -- Handle name mappings between Mason and lspconfig
+            local name_map = {
+                ["lua-language-server"] = "lua_ls",
+                ["typescript-language-server"] = "ts_ls",
+                ["html-lsp"] = "html",
+                ["css-lsp"] = "cssls",
+                ["json-lsp"] = "jsonls",
+                ["vue-language-server"] = "volar",
+                ["tailwindcss-language-server"] = "tailwindcss",
+                ["rust-analyzer"] = "rust_analyzer",
+                ["dockerfile-language-server"] = "dockerls",
+            }
+            
+            server_name = name_map[server_name] or server_name
+            
+            table.insert(installed_servers, server_name)
+        end
+    end
+
+    return installed_servers
+end
+
+-- Get all Mason-installed formatters
+function M.get_mason_formatters()
+    local mason_registry_ok, mason_registry = pcall(require, "mason-registry")
+    if not mason_registry_ok then
+        return {}
+    end
+
+    local installed_formatters = {}
+    local installed_packages = mason_registry.get_installed_packages()
+
+    for _, pkg in ipairs(installed_packages) do
+        -- Check if package is a formatter
+        if pkg.spec.categories and vim.tbl_contains(pkg.spec.categories, "Formatter") then
+            table.insert(installed_formatters, pkg.name)
+        end
+    end
+
+    return installed_formatters
+end
+
+-- Merge explicitly configured servers with Mason-installed ones
+function M.get_all_servers(explicit_servers)
+    local all_servers = vim.deepcopy(explicit_servers or {})
+    local mason_servers = M.get_mason_lsp_servers()
+    
+    -- Add Mason-installed servers that aren't already in the list
+    for _, mason_server in ipairs(mason_servers) do
+        if not vim.tbl_contains(all_servers, mason_server) then
+            table.insert(all_servers, mason_server)
+        end
+    end
+    
+    return all_servers
+end
+
 return M
