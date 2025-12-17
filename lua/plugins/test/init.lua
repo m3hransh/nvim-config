@@ -52,7 +52,7 @@ return {
             dap = { justMyCode = false },
             -- Command line arguments for runner
             -- Can also be a function to return dynamic values
-            args = { "--log-level", "DEBUG" },
+            args = { "-s", "--log-level", "DEBUG" },
             -- Runner to use. Will use pytest if available by default.
             -- Can be a function to return dynamic value.
             runner = "pytest",
@@ -72,7 +72,7 @@ return {
             pytest_discover_instances = false,
           }) },
         status = { virtual_text = true },
-        output = { open_on_run = true },
+        output = { open_on_run = true, short=false },
         -- overseer.nvim
         consumers = {
           overseer = require "neotest.consumers.overseer",
