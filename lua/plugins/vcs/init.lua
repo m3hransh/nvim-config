@@ -38,23 +38,11 @@ return {
           end
 
           map("n", "]c", function()
-            if vim.wo.diff then
-              return "]c"
-            end
-            vim.schedule(function()
-              gs.nav_hunk{ direction = "next" }
-            end)
-            return "<Ignore>"
+            gs.nav_hunk('next', { preview = true, target = 'all' })
           end, { expr = true })
 
           map("n", "[c", function()
-            if vim.wo.diff then
-              return "[c"
-            end
-            vim.schedule(function()
-              gs.nav_hunk{ direction = "prev" }
-            end)
-            return "<Ignore>"
+            gs.nav_hunk('prev', { preview = true, target = 'all' })
           end, { expr = true })
 
           -- Actions
@@ -73,7 +61,6 @@ return {
           map("n", "<leader>ghD", function()
             gs.diffthis("~")
           end, { desc = "Diff This ~" })
-          map("n", "<leader>gtd", gs.toggle_deleted, { desc = "Toggle Delete" })
 
           -- Text object
           map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Select Hunk" })
