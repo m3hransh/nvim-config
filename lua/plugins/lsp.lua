@@ -17,7 +17,7 @@ return {
         ensure_installed = {
           -- LSP servers (matching your vim.lsp.enable() config)
           "pyright",
-          "pylsp",
+          -- "pylsp",
           "ruff",
           "lua-language-server",       -- Lua LSP
           "gopls",                     -- Go LSP
